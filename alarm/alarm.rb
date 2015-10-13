@@ -4,7 +4,7 @@
 require 'packetfu'
 
 def alert(iname, source, protocol, payload)
-    message = "#{$count}. ALERT: #{iname} is detected from #{source} (#{protocol}) (#{payload.unpack('H*')})!"
+    message = "#{$count}. ALERT: #{iname} is detected from #{source} (#{protocol}) (#{payload.unpack('m*')})!"
     $count = $count + 1
     puts message
 end
