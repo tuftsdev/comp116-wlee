@@ -4,7 +4,7 @@
 require 'packetfu'
 
 def alert(iname, source, protocol, payload)
-    message = "#{$count}. ALERT: #{iname} is detected from #{source} (#{protocol}) (#{payload.unpack('m*')})!"
+    message = "#{$count}. ALERT: #{iname} is detected from #{source} (#{protocol}) (#{payload})!"
     $count = $count + 1
     puts message
 end
@@ -43,13 +43,13 @@ elsif ARGV.length == 0
             pload = pkt.payload
             if pkt.kind_of?(PacketFu::TCPPacket)
                 flags = pkt.tcp_flags
-                alert("NULL scan",pkt.ip_src,"TCP",pload) if !flags.urg and !flags.ack and !flags.psh and !flags.rst and !flags.syn and !flags.fin
-                alert("FIN scan",pkt.ip_src,"TCP",pload) if !flags.urg and !flags.ack and !flags.psh and !flags.rst and !flags.syn and flags.fin
-                alert("XMAS scan",pkt.ip_src,"TCP",pload) if flags.urg and !flags.ack and flags.psh and !flags.rst and !flags.syn and flags.fin
+                alert("NULL scan",pkt.ip_src,"TCP",pload.unpack('m*')) if !flags.urg and !flags.ack and !flags.psh and !flags.rst and !flags.syn and !flags.fin
+                alert("FIN scan",pkt.ip_src,"TCP",pload.unpack('m*')) if !flags.urg and !flags.ack and !flags.psh and !flags.rst and !flags.syn and flags.fin
+                alert("XMAS scan",pkt.ip_src,"TCP",pload.unpack('m*')) if flags.urg and !flags.ack and flags.psh and !flags.rst and !flags.syn and flags.fin
             end
-            alert("nmap scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload) if pload.include? "nmap" or pload.include? '\4e\6d\61\70' or pload.include? "Nmap"
-            alert("nikto scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload) if pload.include? "nikto" or pload.include? '6e\69\6b\74\6f'
-            alert("Credit Card Leak", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload) if checkCredit(pload)
+            alert("nmap scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if pload.include? "nmap" or pload.include? '\4e\6d\61\70' or pload.include? "Nmap"
+            alert("nikto scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if pload.include? "nikto" or pload.include? '6e\69\6b\74\6f'
+            alert("Credit Card Leak", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if checkCredit(pload)
         end
     end
 else
