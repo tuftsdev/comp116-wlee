@@ -48,7 +48,7 @@ elsif ARGV.length == 0
                 alert("XMAS scan",pkt.ip_src,"TCP",pload.unpack('m*')) if flags.urg and !flags.ack and flags.psh and !flags.rst and !flags.syn and flags.fin
             end
             alert("nmap scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if pload.include? "nmap" or pload.include? '\4e\6d\61\70' or pload.include? "Nmap"
-            alert("nikto scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if pload.include? "nikto" or pload.include? '6e\69\6b\74\6f'
+            alert("nikto scan", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if pload.include? "Nikto" or pload.include? '\4e\69\6b\74\6f'
             alert("Credit Card Leak", pkt.ip_src,pkt.proto[pkt.proto.size - 1],pload.unpack('m*')) if checkCredit(pload)
         end
     end
